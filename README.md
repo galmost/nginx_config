@@ -1,4 +1,4 @@
-# jenkins_playbook
+# Ansible playbook to install Jenkins with HTTPS
 Jenkins+Nginx+SSL by ansible
 
 Installing Jenkins+Nginx+SSL on Ubuntu 16.04 by using Ansible.
