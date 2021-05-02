@@ -1,3 +1,7 @@
 ---
-  - include_role:
-     name: nginx
+- hosts: localhost
+  vars:
+    server_name: example.com
+  roles:
+    - role: nginx_config
+
