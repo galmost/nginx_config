@@ -1,92 +1,20 @@
 ---
-#- name: Install Nginx
-#  apt:
-#   name=nginx
-#   state=present
-#   install_recommends=yes
-
-- name: Stopping Nginx
-  service: 
-   name=nginx
-   state=stopped
-
-- name: Add Certbot repository
-  apt_repository:
-    repo: ppa:certbot/certbot
-    state: present
-    update_cache: true
-
-- name: Install Certbot (ex Letsencrypt)
+- name: Install xbfb
   apt:
-    name: certbot
+    name: xvfb
     state: present
 
-- name: Create Letsencrypt validation folder
-  file:
-    path: /usr/share/nginx/html/.well-known/
-    state: directory
-    owner: www-data
-    group: www-data
-    mode: 0775
+- name: Install firefox
+  apt:
+    name: firefox
+    state: present
 
-- name: Check if certificate is already generated
-  stat:
-    path: /etc/letsencrypt/live/{{ server_name }}/fullchain.pem
-  register: certificate
+- name: Install pip3
+  apt:
+    name: python3-pip
+    state: present
 
-- name: Copy Nginx Non SSL config
-  template:
-    src: '../files/non-ssl-server.conf'
-    dest: '/etc/nginx/conf.d/non-ssl-{{ server_name }}.conf'
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Copy Nginx global config
-  template:
-    src: '../files/nginx.conf'
-    dest: '/etc/nginx/nginx.conf'
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Starting Nginx
-  service:
-   name=nginx
-   state=started
-
-- name: Generate certificate
-  shell: certbot certonly --webroot -w /usr/share/nginx/html -n --agree-tos --email admin@medxsms.com -d {{ server_name }} -d www.{{ server_name }}
-  when: certificate.stat.exists == False
-
-- name: Copy Nginx SSL config
-  template:
-    src: '../files/ssl-server.conf'
-    dest: '/etc/nginx/conf.d/ssl-{{ server_name }}.conf'
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Reload Nginx
-  service:
-    name: nginx
-    enabled: yes
-    state: reloaded
-
-- name: Create crontab job for certificates renew (executes every Monday at 2:30 am)
-  cron:
-    name: certificates renew
-    weekday: 1
-    minute: 30
-    hour: 2
-    user: root
-    job: "/usr/bin/certbot renew >> /var/log/le-renew.log"
-
-- name: Create crontab job for nginx reload after certificates renew (executes every Monday at 2:35 am)
-  cron:
-    name: nginx reload certificates
-    weekday: 1
-    minute: 35
-    hour: 2
-    user: root
-    job: "/bin/systemctl reload nginx"
+- name: Install virtualenv for python3
+  pip:
+    name: virtualenv
+    executable: pip3.8
