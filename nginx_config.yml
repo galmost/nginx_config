@@ -1,7 +1,5 @@
 ---
 - hosts: localhost
-  vars:
-    server_name: example.com
   roles:
-    - role: nginx_config
+    - role: virtualenv_selenium
 
