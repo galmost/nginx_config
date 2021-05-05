@@ -1,6 +1,5 @@
-#  Nginx with ssl setup
+#  Virtualenv selenium preq 
 
-Moved to a role approach
+Currently sets up packages that do not necessarily need to be system wide. (besides virtualenv and xvfb)
 
-Based on work done by:
-https://github.com/ferzescu/jenkins_playbook
+Idea is to have pre-requisites already there runs.
